@@ -7,58 +7,92 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="borapdemocss.css" type="text/css">
         <script type="text/javascript">
-        //this is for the team name text at end of demo
-        var can, ctx, step = 10, steps = 50; delay = 20;
-        
-        function init() {
-            can = document.getElementById("MyCanvas");
-            ctx = can.getContext("2d");
-            ctx.fillStyle = "blue";
-            ctx.font = "10pt Helvetica";
-            ctx.textAlign = "center";
-            ctx.textBaseline = "middle";
-            TextSmallToBig();
-        }
-        function TextSmallToBig() {
-            step++;
-            ctx.clearRect(0, 0, can.width, can.height);
-            ctx.save();
-            ctx.translate(can.width / 2, can.height / 2);
-            ctx.font = step + "pt Helvetica";
-            ctx.fillText("CODE ROGUE", 0, 0);
-            ctx.restore();
-            if (step < steps) {
-                var t = setTimeout('TextSmallToBig()', 20);
+            //this is for the team name text at end of demo
+            var can = null, ctx = null, txtBox = null; 
+            var step = 10, steps = 50; delay = 20;
+            var currentTxt = "";
+            
+            var vidLib = [
+                "videos/countdown.mp4"
+                ,"videos/0.mp4"
+                //,"videos/1.mp4"
+                //,"videos/2.mp4"
+                //,"videos/3.mp4"
+            ];
+
+            function initCanvas(canvasId) {
+                txtBox = document.getElementById(canvasId);
+//                txtBox.onchange = function(e) {
+//                    textSmallToBig();
+//                }
+                can = document.getElementById("wrcr");
+                ctx = can.getContext("2d");
+                ctx.fillStyle = "yellow";
+                ctx.font = "10pt Helvetica";
+                ctx.textAlign = "center";
+                ctx.textBaseline = "middle";
             }
-        }
+            function textSmallToBig() {
+                step++;
+                if (step < steps) {
+                    ctx.clearRect(0, 0, can.width, can.height);
+                    ctx.save();
+                    ctx.translate(can.width / 2, can.height / 2);
+                    ctx.font = step + "pt Helvetica";
+                    ctx.fillText(currentTxt, 0, 0);
+                    ctx.restore();
+                    var t = setTimeout('textSmallToBig()', 20);
+                }else{
+                    step = 0;
+                    ctx.font = step + "pt Helvetica";
+                    ctx.fillText("", 0, 0);
+                    ctx.clearRect(0, 0, can.width, can.height);
+                    ctx.save();
+                    ctx.restore();
+                }
+            }
+            function pause(milliseconds) {
+                var dt = new Date();
+                while ((new Date()) - dt <= milliseconds) {}
+            }
+            function changeText(txt) {
+                txtBox.value = txt;
+                //txtBox.onchange();
+            }
+            function showCredits(){
+                currentTxt = "WE ARE";
+                changeText(currentTxt);
+                textSmallToBig();
+                currentTxt = "CODE ROGUE";
+                changeText(currentTxt);
+                textSmallToBig();
+            }
         </script>
     </head>
-    <body onload="init();">
+    <body onload="initCanvas('wrcr');">
+        <input hidden id="canvasText" type="text" onchange="textSmallToBig();">
         <div class="outer-container">
             <div class="inner-container">
-                <video id="countdown" autoplay>
+                <canvas id="wrcr" class="video-overlay" width="500" height="300">
+                    This browser or document mode does not support canvas object
+                </canvas>
+                <video id="borap" autoplay>
                     <source src="videos/countdown.mp4" type="video/mp4">
                     Your browser does not support the video tag.
                 </video>
-                <video id="0" autoplay>
-                    <source src="videos/0.mp4" type="video/mp4">
-                    Your browser does not support the video tag.
-                </video>
-                <video id="1" autoplay>
-                    <source src="videos/1.mp4" type="video/mp4">
-                    Your browser does not support the video tag.
-                </video>
-                <video id="2" autoplay>
-                    <source src="videos/2.mp4" type="video/mp4">
-                    Your browser does not support the video tag.
-                </video>
-                <video id="3" autoplay>
-                    <source src="videos/3.mp4" type="video/mp4">
-                    Your browser does not support the video tag.
-                </video>
-                <canvas id="MyCanvas" class="video-overlay" width="500" height="300">
-                This browser or document mode does not support canvas object
-                </canvas>
+                <script type="text/javascript" title="cycling through videos">
+                    var currentVid = 0;
+                    var vidElement = document.getElementById('borap');
+                    vidElement.addEventListener('ended', function(e) {
+                        currentVid = (++currentVid) % vidLib.length;
+                        if(currentVid > 0){
+                            vidElement.src = vidLib[currentVid]; 
+                            vidElement.play();
+                        }else{
+                            showCredits();
+                        }
+                    });
+                </script>
             </div>
         </div>
     </body>
