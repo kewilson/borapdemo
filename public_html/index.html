@@ -43,34 +43,27 @@
                     ctx.restore();
                     var t = setTimeout('textSmallToBig()', 20);
                 }else{
-                    step = 0;
-                    ctx.font = step + "pt Helvetica";
-                    ctx.fillText("", 0, 0);
-                    ctx.clearRect(0, 0, can.width, can.height);
-                    ctx.save();
-                    ctx.restore();
+                    showCredits();
                 }
             }
-            function pause(milliseconds) {
-                var dt = new Date();
-                while ((new Date()) - dt <= milliseconds) {}
-            }
-            function changeText(txt) {
-                txtBox.value = txt;
-                //txtBox.onchange();
-            }
             function showCredits(){
-                currentTxt = "WE ARE";
-                changeText(currentTxt);
-                textSmallToBig();
-                currentTxt = "CODE ROGUE";
-                changeText(currentTxt);
-                textSmallToBig();
+                if(currentTxt === ""){
+                    currentTxt = "WE ARE";
+                    textSmallToBig();
+                }else if (currentTxt === "WE ARE"){
+                    currentTxt = "";
+                    step = 0;
+                    ctx.font = step + "pt Helvetica";
+                    ctx.fillText(currentTxt, 0, 0);
+                    ctx.clearRect(0, 0, can.width, can.height);
+                    ctx.save();
+                    currentTxt = "CODE ROGUE";
+                    textSmallToBig();
+                }
             }
         </script>
     </head>
     <body onload="initCanvas('wrcr');">
-        <input hidden id="canvasText" type="text" onchange="textSmallToBig();">
         <div class="outer-container">
             <div class="inner-container">
                 <canvas id="wrcr" class="video-overlay" width="500" height="300">
