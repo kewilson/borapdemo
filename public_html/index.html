@@ -58,6 +58,10 @@
                     textSmallToBig();
                 }
             }
+            function playNextVideo(next) {
+                vidElement.src = vidLib[next]; 
+                vidElement.play();
+            }
         </script>
     </head>
     <body onload="initCanvas('wrcr');">
@@ -76,8 +80,8 @@
                     vidElement.addEventListener('ended', function(e) {
                         currentVid = (++currentVid) % vidLib.length;
                         if(currentVid > 0){
-                            vidElement.src = vidLib[currentVid]; 
-                            vidElement.play();
+                            var delay = 5000;
+                            setTimeout(playNextVideo, delay, currentVid);
                         }else{
                             showCredits();
                         }
