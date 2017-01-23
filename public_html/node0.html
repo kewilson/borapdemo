@@ -15,16 +15,18 @@
             var vidLib = [
                 "videos/countdown.mp4"
                 ,"videos/0.mp4"
-                ,"videos/1.mp4"
+//                ,"videos/1.mp4"
                 ,"videos/2.mp4"
-                ,"videos/3.mp4"
+//                ,"videos/3.mp4"
             ];
 
+            var vidDelay = [0, 0, 10400];
+            
             function initCanvas(canvasId) {
                 txtBox = document.getElementById(canvasId);
                 can = document.getElementById("wrcr");
                 ctx = can.getContext("2d");
-                ctx.fillStyle = "yellow";
+                ctx.fillStyle = "red";
                 ctx.font = "10pt Helvetica";
                 ctx.textAlign = "center";
                 ctx.textBaseline = "middle";
@@ -80,8 +82,11 @@
                     vidElement.addEventListener('ended', function(e) {
                         currentVid = (++currentVid) % vidLib.length;
                         if(currentVid > 0){
-                            var delay = 5000;
-                            setTimeout(playNextVideo, delay, currentVid);
+                            setTimeout(
+                                playNextVideo, 
+                                vidDelay[currentVid], 
+                                currentVid
+                            );
                         }else{
                             showCredits();
                         }
